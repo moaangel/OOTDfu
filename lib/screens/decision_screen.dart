@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import '../data/classificationCloth.dart';
 import 'package:ootdforyou/model/cloth.dart';
 import 'package:ootdforyou/data/clothDB.dart';
 import 'package:ootdforyou/screens/weather_screen.dart';
@@ -46,9 +46,9 @@ class _DecisionPageState extends State<DecisionPage> {
   void initState() {
 
     super.initState();
-    isHot = () => WeatherScreen.tempo > 23;
-    isWarm = () => WeatherScreen.tempo > 12;
-    isCool = () => WeatherScreen.tempo >= 5;
+    isHot = () => WeatherScreen.feelstmp > 23;
+    isWarm = () => WeatherScreen.feelstmp > 12;
+    isCool = () => WeatherScreen.feelstmp >= 5;
     isWind = () => WeatherScreen.winds > 8;
 
     bool isOuter(Cloth cloth) {

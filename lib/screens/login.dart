@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:ootdforyou/screens/rf_screen.dart';
 import 'package:ootdforyou/screens/signup.dart';
 import 'package:ootdforyou/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -128,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
           password: _passwordController.text,
         );
 
-        Get.offAll(() => const MainScreen());
+        Get.offAll(() => RFPage());
       } on FirebaseAuthException catch (e) {
         logger.e(e);
         String message = '';

@@ -8,7 +8,7 @@ import 'package:ootdforyou/model/weather.dart';
 class WeatherScreen extends StatefulWidget {
   WeatherScreen({this.parseWeatherData, this.parseAirPollution});
 
-  static int tempo = _WeatherScreenState.temp;
+  static double feelstmp = _WeatherScreenState.feelstmp;
   static double winds = _WeatherScreenState.windSpeed;
   static String wecon = _WeatherScreenState.weatherCondition;
   final dynamic parseWeatherData;
@@ -27,10 +27,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
   late double dust2;
   var date = DateTime.now();
   String cityName = '';
-  static int temp = 0;
+  int temp = 0;
   static double windSpeed = 0;
   String weatherDes = '';
   static String weatherCondition = '';
+  static double feelstmp = 0;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     int condition = weatherData['weather'][0]['id'];
     double temp2 = weatherData['main']['temp'];
     temp = temp2.round();
+    feelstmp = weatherData['main']['feels_like'];
     windSpeed = weatherData['wind']['speed'];
     cityName = weatherData['name'];
     weatherDes = weatherData['weather'][0]['description'];
@@ -56,6 +58,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     print(temp);
     print(cityName);
+    print(feelstmp);
   }
 
   String getSystemTime() {
