@@ -1,10 +1,11 @@
 import 'dart:math';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:ootdforyou/data/classificationCloth.dart';
 import 'package:ootdforyou/model/cloth.dart';
 import 'package:ootdforyou/screens/weather_screen.dart';
 import 'package:ootdforyou/utils/decisionTree.dart';
+import 'package:ootdforyou/screens/note_screen.dart';
 
 class RFColdPage extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _RFColdPageState extends State<RFColdPage> {
   bool isMale = false;
   bool isFemale = false;
 
-  Cloth? _selectedCloth;
+  //Cloth? _selectedCloth;
 
   @override
   void initState() {
@@ -58,6 +59,22 @@ class _RFColdPageState extends State<RFColdPage> {
   Future<void> _loadData() async {
     await _classificationCloth.loadClothes(); // 데이터 로드
     setState(() {}); // 화면 갱신
+  }
+
+  Future<void> sendFeedbackEmail(String feedbackMessage) async {
+    final String emailAddress = '016vhsdkdl@naver.com';
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: emailAddress,
+      queryParameters: {'subject': 'User Feedback', 'body': feedbackMessage},
+    );
+
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      throw '이메일 앱을 열 수 없습니다.';
+    }
   }
 
   @override
@@ -165,7 +182,12 @@ class _RFColdPageState extends State<RFColdPage> {
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
-                              // 페이지 이동
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NotePage(),
+                                ),
+                              );
                             },
                             child: Text('OOTD 기록하기'),
                           ),
@@ -175,34 +197,48 @@ class _RFColdPageState extends State<RFColdPage> {
                               showDialog(
                                 context: context,
                                 builder: (context) {
+                                  String feedbackMessage = '';
+
                                   return AlertDialog(
                                     title: Text('피드백 주기'),
-                                    content: Text('미안해요.. 제작자에게 피드백을 주시겠어요?'),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('미안해요.. 제작자에게 피드백을 주시겠어요?'),
+                                        SizedBox(height: 16.0),
+                                        TextField(
+                                          onChanged: (value) {
+                                            feedbackMessage = value;
+                                          },
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: '피드백 메시지',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     actions: [
                                       TextButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
-                                              content: Text('피드백을 주셔서 감사합니다!'),
+                                              content: Text('피드백을 주셔서 감사합니다.'),
                                               behavior: SnackBarBehavior.floating,
                                             ),
                                           );
-                                          // 피드백 페이지로 이동하는 코드 추가
+                                          try {
+                                            await sendFeedbackEmail(feedbackMessage);
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('이메일 앱을 열 수 없습니다.'),
+                                                behavior: SnackBarBehavior.floating,
+                                              ),
+                                            );
+                                          }
                                         },
-                                        child: Text('네'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text('알겠습니다. 죄송합니다.'),
-                                              behavior: SnackBarBehavior.floating,
-                                            ),
-                                          );
-                                        },
-                                        child: Text('아니요'),
+                                        child: Text('전송'),
                                       ),
                                     ],
                                   );
@@ -219,6 +255,7 @@ class _RFColdPageState extends State<RFColdPage> {
                 backgroundColor: Colors.grey,
                 child: Icon(Icons.arrow_forward),
               ),
+
             ],
           ),
           Expanded(

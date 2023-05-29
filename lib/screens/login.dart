@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:ootdforyou/screens/rf_screen.dart';
 import 'package:ootdforyou/screens/signup.dart';
-import 'package:ootdforyou/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 var logger = Logger(
@@ -124,10 +124,19 @@ class _LoginPageState extends State<LoginPage> {
 
       // Firebase 사용자 인증, 사용자 등록
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
+
+        User? user = userCredential.user;
+        if (user != null) {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+            'userId': user.email,
+            'email': user.email,
+            // 추가 필드들...
+          });
+        }
 
         Get.offAll(() => RFPage());
       } on FirebaseAuthException catch (e) {

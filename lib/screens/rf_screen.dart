@@ -8,6 +8,8 @@ import 'package:ootdforyou/utils/decisionTree.dart';
 import 'package:ootdforyou/screens/rf_coldtype_screen.dart';
 import 'package:ootdforyou/screens/rf_hottype_screen.dart';
 
+import 'package:ootdforyou/screens/note_screen.dart';
+
 class RFPage extends StatefulWidget {
   @override
   _RFPageState createState() => _RFPageState();
@@ -25,7 +27,7 @@ class _RFPageState extends State<RFPage> {
   bool isMale = false;
   bool isFemale = false;
 
-  Cloth? _selectedCloth;
+  //Cloth? _selectedCloth;
 
   @override
   void initState() {
@@ -165,7 +167,12 @@ class _RFPageState extends State<RFPage> {
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
-                              // 페이지 이동
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NotePage(),
+                                ),
+                              );
                             },
                             child: Text('OOTD 기록하기'),
                           ),

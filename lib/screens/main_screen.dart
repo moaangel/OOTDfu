@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootdforyou/data/clothDB.dart';
 import 'package:ootdforyou/model/cloth.dart';
-import 'package:ootdforyou/screens/review.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:ootdforyou/screens/decision_screen.dart';
 
 class MainScreen extends StatefulWidget {
