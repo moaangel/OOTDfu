@@ -5,16 +5,14 @@ import 'package:ootdforyou/data/classificationCloth.dart';
 import 'package:ootdforyou/model/cloth.dart';
 import 'package:ootdforyou/screens/weather_screen.dart';
 import 'package:ootdforyou/utils/decisionTree.dart';
-import 'package:ootdforyou/screens/rf_coldtype_screen.dart';
-import 'package:ootdforyou/screens/rf_hottype_screen.dart';
 
-class RFPage extends StatefulWidget {
+class RFHotPage extends StatefulWidget {
   @override
-  _RFPageState createState() => _RFPageState();
+  _RFHotPageState createState() => _RFHotPageState();
 }
 
-class _RFPageState extends State<RFPage> {
-  final ClassificationCloth _classificationCloth = ClassificationCloth();
+class _RFHotPageState extends State<RFHotPage> {
+  final HottypeCloth _classificationCloth = HottypeCloth();
 
   String todaytmp = '';
 
@@ -31,13 +29,13 @@ class _RFPageState extends State<RFPage> {
   void initState() {
     super.initState();
     _loadData();
-    isHot = () => WeatherScreen.feelstmp > 23;
+    isHot = () => WeatherScreen.feelstmp > 21;
     isWarm = () => WeatherScreen.feelstmp > 15;
     isCool = () => WeatherScreen.feelstmp > 4;
 
     // 날씨 판단
     var autumnNode =
-        WeatherConditionNode(isCool, "autumn cloth", "winter cloth");
+    WeatherConditionNode(isCool, "autumn cloth", "winter cloth");
     var springNode = WeatherConditionNode(isWarm, "spring cloth", autumnNode);
     var summerNode = WeatherConditionNode(isHot, "summer cloth", springNode);
 
@@ -120,10 +118,11 @@ class _RFPageState extends State<RFPage> {
               FloatingActionButton(
                 onPressed: () {
                   setState(() {
-                    if (!isMale) {
+                    if(!isMale) {
                       isFemale = false;
                       isMale = true;
-                    } else {
+                    }
+                    else{
                       isMale = false;
                     }
                   });
@@ -135,10 +134,11 @@ class _RFPageState extends State<RFPage> {
               FloatingActionButton(
                 onPressed: () {
                   setState(() {
-                    if (!isFemale) {
+                    if(!isFemale) {
                       isMale = false;
                       isFemale = true;
-                    } else {
+                    }
+                    else{
                       isFemale = false;
                     }
                   });
@@ -154,7 +154,7 @@ class _RFPageState extends State<RFPage> {
                     builder: (context) {
                       return AlertDialog(
                         title: Text('OOTD'),
-                        content: Text('오늘 이 옷차림은 어떠세요?'),
+                        content: Text('이 옷차림은 어떠세요?'),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -172,38 +172,44 @@ class _RFPageState extends State<RFPage> {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('이런! 더 시원한 옷을 골라볼게요.'),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RFHotPage(),
-                                ),
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('피드백 주기'),
+                                    content: Text('미안해요.. 제작자에게 피드백을 주시겠어요?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('피드백을 주셔서 감사합니다!'),
+                                              behavior: SnackBarBehavior.floating,
+                                            ),
+                                          );
+                                          // 피드백 페이지로 이동하는 코드 추가
+                                        },
+                                        child: Text('네'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('알겠습니다. 죄송합니다.'),
+                                              behavior: SnackBarBehavior.floating,
+                                            ),
+                                          );
+                                        },
+                                        child: Text('아니요'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
-                            child: Text('너무 더울 것 같은데..?'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('이런! 더 따뜻한 옷을 골라볼게요.'),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RFColdPage(),
-                                ),
-                              );
-                            },
-                            child: Text('너무 추울 것 같은데..?'),
+                            child: Text('마음에 안들어'),
                           ),
                         ],
                       );
@@ -216,97 +222,94 @@ class _RFPageState extends State<RFPage> {
             ],
           ),
           Expanded(
-            child: isMale || isFemale
-                ? ListView.builder(
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      Cloth? selectedCloth;
-                      String title = '';
-                      List<Cloth> clothes = [];
-                      if (isMale) {
-                        switch (index) {
-                          case 0:
-                            title = 'Outer';
-                            clothes = outerListM;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                          case 1:
-                            title = 'Top';
-                            clothes = topListM;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                          case 2:
-                            title = 'Bottom';
-                            clothes = bottomListM;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                        }
-                      } else if (isFemale) {
-                        switch (index) {
-                          case 0:
-                            title = 'Outer';
-                            clothes = outerListW;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                          case 1:
-                            title = 'Top';
-                            clothes = topListW;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                          case 2:
-                            title = 'Bottom';
-                            clothes = bottomListW;
-                            selectedCloth = clothes.isNotEmpty
-                                ? clothes[Random().nextInt(clothes.length)]
-                                : null;
-                            break;
-                        }
-                      }
+            child: isMale || isFemale ? ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                Cloth? selectedCloth;
+                String title = '';
+                List<Cloth> clothes = [];
+                if (isMale) {
+                  switch (index) {
+                    case 0:
+                      title = 'Outer';
+                      clothes = outerListM;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                    case 1:
+                      title = 'Top';
+                      clothes = topListM;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                    case 2:
+                      title = 'Bottom';
+                      clothes = bottomListM;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                  }
+                } else if (isFemale) {
+                  switch (index) {
+                    case 0:
+                      title = 'Outer';
+                      clothes = outerListW;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                    case 1:
+                      title = 'Top';
+                      clothes = topListW;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                    case 2:
+                      title = 'Bottom';
+                      clothes = bottomListW;
+                      selectedCloth = clothes.isNotEmpty
+                          ? clothes[Random().nextInt(clothes.length)]
+                          : null;
+                      break;
+                  }
+                }
 
-                      return Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 16.0),
-                            selectedCloth != null
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('옷 이름: ${selectedCloth.name}'),
-                                      SizedBox(height: 8.0),
-                                      Image.network(
-                                        selectedCloth.imageUrl,
-                                        width: 300.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ],
-                                  )
-                                : Text('입지 않아도 될 거 같아요!'),
-                          ],
+                return Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                  )
-                : Container(),
+                      ),
+                      SizedBox(height: 16.0),
+                      selectedCloth != null
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('옷 이름: ${selectedCloth.name}'),
+                          SizedBox(height: 8.0),
+                          Image.network(
+                            selectedCloth.imageUrl,
+                            width: 300.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      )
+                          : Text('입지 않아도 될 거 같아요!'),
+                    ],
+                  ),
+                );
+              },
+            ) : Container(),
           ),
         ],
       ),
