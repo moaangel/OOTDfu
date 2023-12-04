@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _passwordController,
       obscureText: true,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
         labelText: '비밀번호',

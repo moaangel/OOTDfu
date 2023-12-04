@@ -1,9 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ootdforyou.ootdforyou">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
    <application
         android:label="ootdforyou"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ootdicon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,4 +34,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
+
+
 </manifest>
