@@ -26,6 +26,15 @@
 <br/>
 <br/>
 
+# 🛠️ 기술 스택
+
+| 분야   | 기술 스택 |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IDE | ![Android Studio](https://img.shields.io/badge/android%20studio-346ac1?style=for-the-badge&logo=android%20studio&logoColor=white) |
+| Programming Languages | ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)  |
+| Framework |![Flutter](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white) |
+| Backend & Database | ![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34)  |
+| Version Control | ![GitHub](https://img.shields.io/badge/github-FF4438?style=for-the-badge&logo=github&logoColor=white)     
 
 
 # 🎯 기능
